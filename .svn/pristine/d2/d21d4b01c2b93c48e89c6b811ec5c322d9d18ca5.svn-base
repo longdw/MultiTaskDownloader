@@ -1,0 +1,10 @@
+/**
+ * Copyright (c) www.bugull.com
+ */
+package com.ldw.downloader.utils;
+
+public class Constants {
+	
+	public static final String SERVICE_ACTION = "com.ldw.downloader.service.DownloadService";
+
+}

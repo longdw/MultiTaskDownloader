@@ -1,0 +1,21 @@
+/**
+ * Copyright (c) www.bugull.com
+ */
+package com.ldw.downloader.service;
+
+import android.os.AsyncTask;
+
+public class DownloadTask extends AsyncTask<Void, Integer, Long>{
+	
+	private String mUrl;
+
+	@Override
+	protected Long doInBackground(Void... params) {
+		return null;
+	}
+	
+	public String getUrl() {
+		return mUrl;
+	}
+
+}

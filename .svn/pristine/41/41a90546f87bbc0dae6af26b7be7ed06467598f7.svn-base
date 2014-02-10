@@ -1,0 +1,11 @@
+/**
+ * Copyright (c) www.bugull.com
+ */
+package com.ldw.downloader.utils;
+
+public class DownloadConstants {
+	
+	public static final String SERVICE_ACTION = "com.ldw.downloader.service.DownloadService";
+	public static final String RECEIVER_ACTION = "com.ldw.downloader.receiver";
+
+}

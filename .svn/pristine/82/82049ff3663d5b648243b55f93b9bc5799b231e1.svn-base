@@ -1,0 +1,38 @@
+/**
+ * Copyright (c) www.bugull.com
+ */
+package com.ldw.downloader.service;
+
+/**
+ * 下载核心控制器
+ * @author longdw(longdawei1988@gmail.com)
+ *
+ * 2014-1-13
+ */
+public class DownloadControl extends Thread {
+	
+	public DownloadControl() {
+		
+	}
+	
+	public void addTask(String url) {
+		
+	}
+	
+	public void pauseTask(String url) {
+		
+	}
+	
+	public void deleteTask(String url) {
+		
+	}
+	
+	public void continueTask(String url) {
+		
+	}
+	
+	private class TaskQueue {
+		
+	}
+
+}

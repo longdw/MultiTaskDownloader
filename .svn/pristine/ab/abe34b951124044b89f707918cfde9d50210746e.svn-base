@@ -1,0 +1,13 @@
+在写多任务断点续传项目过程中遇到3个比较奇葩的问题
+
+1、回调函数中打印出的下载进度和广播中接收到的进度完全不同步，感觉广播消息阻塞了一样，初步查找原因是由于DownloadTask中
+onProgressUpdate方法中使用了mDao.updateCurrentSizeByUrl(mUrl, tempSize);这段代码，很奇怪，我把这段代码放入DownloadControl
+的updateProgress回调方法中就OK了；
+
+2、DownloadControl类中的run方法执行了execute，发现添加多个任务时后面的任务要等到前面的任务执行完才执行，后来查找相关资料
+和朋友的指点后才发现，AsyncTask在1.6之前是采用单线程，也就是顺序执行，后来在1.6到3.0版本之间采用的是线程池技术可以并行执行，
+3.0之后考虑到并行带来的问题又改回到了当初的单线程，但是它提供了executeOnExcutor方法支持并行，据此我在manifest中的加入了
+<uses-sdk android:minSdkVersion="8" />这个就OK了；
+
+3、断点下载过程中遇到了问题，发现addHeader("Range", "bytes=" + mPreviousFileSize + "-")，mPreviousFileSize的大小是已下载
+文件大小-1，seek(mPreviousFileSize)这个方法同样如此。
