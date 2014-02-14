@@ -50,6 +50,7 @@ public class MainActivity extends Activity {
 	private MyAdapter mAdapter;
 
 	private ServiceManager mServiceManager;
+	private com.ldw.downloader.test.MainActivity.InstallReceiver mInstallReceiver;
 	
 
 	@Override
@@ -65,6 +66,13 @@ public class MainActivity extends Activity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(DownloadConstants.RECEIVER_ACTION);
 		registerReceiver(mReceiver, filter);
+		
+		mInstallReceiver = new InstallReceiver();
+		IntentFilter installFilter = new IntentFilter();
+		installFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+		installFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+		installFilter.addDataScheme("package");
+		registerReceiver(mInstallReceiver, installFilter);
 
 		mListView = (ListView) findViewById(R.id.listview);
 		mAdapter = new MyAdapter();
@@ -78,6 +86,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void initData() throws MalformedURLException {
+		list.clear();
 		for (int i = 0; i < 4; i++) {
 			APK apk = new APK();
 			apk.setIcon(icon[i]);
@@ -318,6 +327,34 @@ public class MainActivity extends Activity {
 //			ImageView iv;
 //			Button btn;
 //		}
+	}
+	
+	public class InstallReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			String data = intent.getDataString();
+			if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {// 有应用被添加
+				if (data != null) {
+					String pack = data.split(":")[1];
+					for (APK apk : list) {
+						if (apk.getPackageName().equals(pack)) {
+							mDao.deleteByUrl(apk.getUrl());
+							apk.setStatus(DownloadConstants.STATUS_COMPLETE);
+							mAdapter.notifyDataSetChanged();
+							break;
+						}
+					}
+				}
+			} else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {// 有应用被卸载
+				try {
+					initData();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 
